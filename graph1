@@ -1,0 +1,38 @@
+import numpy as np
+import pandas as pd 
+import matplotlib.pyplot as plt 
+
+data = pd.read_csv('./crime_data.csv',encoding='cp949')
+
+occurrenceData = data[data['구분'] == '발생건수'] 
+arrestData = data[data['구분'] == '검거건수']
+
+occurrenceCounts = occurrenceData[['피싱', '파밍', '스미싱', '메모리해킹', '메신저이용사기', '쇼핑몰 사기', '(사이버금융)기타']]
+totalOccurrence = occurrenceCounts.sum()
+
+arrestCounts = arrestData[['피싱', '파밍', '스미싱', '메모리해킹', '메신저이용사기', '쇼핑몰 사기', '(사이버금융)기타']]
+totalArrest = arrestCounts.sum() 
+totalArrestRate = totalArrest / totalOccurrence * 100 
+
+print("발생 건수의 합:")
+print(totalOccurrence)
+
+print("총 검거율(%):")
+print(totalArrestRate)
+
+plt.rcParams['font.family'] = 'Malgun Gothic'
+
+name = ['피싱', '파밍', '스미싱', '메모리해킹', '메신저이용사기', '쇼핑몰 사기', '(사이버금융)기타']
+x = np.arange(len(name))
+
+plt.subplot(2, 1)        
+plt.bar(range(len(totalOccurrence)),totalOccurrence)
+plt.xticks(x,name, rotation=12)
+plt.title('발생 건수')
+         
+plt.bar(range(len(totalArrestRate)),totalArrestRate)
+plt.xticks(x,name, rotation=12)
+plt.title('총 검거율(%)')
+
+plt.tight_layout()
+plt.show()
